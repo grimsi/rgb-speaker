@@ -1,22 +1,38 @@
 {
-  "name": "electron-quick-start",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "name": "arduino-rgb-speaker",
+  "version": "0.0.1",
+  "description": "Software Client to control the RGB-Speakers",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/grimsi/rgb-speaker",
   "keywords": [
+    "Arduino",
+    "RGB",
+    "Speaker",
     "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "DIY",
+    "audio",
+    "FFT",
+    "Spectrum"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "grimsi",
+  "license": "MIT",
   "devDependencies": {
     "electron": "~1.6.2"
+  },
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-animate": "^1.5.8",
+    "angular-aria": "^1.6.5",
+    "angular-material": "^1.1.1",
+    "angular-material-icons": "^0.7.1",
+    "angular-messages": "^1.5.8",
+    "angular-ui-router": "^0.3.1",
+    "audio-analyser": "^1.0.2",
+    "md-color-picker": "^0.2.6",
+    "moment": "^2.14.1",
+    "window-function": "^2.0.2"
   }
 }
