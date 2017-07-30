@@ -2,6 +2,7 @@ var app = angular.module('rgbSpeaker', ['ngMaterial', 'ngCookies', 'mdColorPicke
 
 app.controller('mainCtrl', function ($scope, $cookies) {
     var sp = require('serialport');
+    var tinycolor = require('tinycolor2');
     $scope.openPorts = [];
     $scope.colorPicker = {};
     var SerialPort = {};
@@ -27,27 +28,32 @@ app.controller('mainCtrl', function ($scope, $cookies) {
     });
 
     $scope.$watch('port', function () {
-        if (angular.isDefined($scope.port) && !sp.isOpen($scope.port)) {
+        if (angular.isDefined($scope.port)) {
             openSerialPort($scope.port);
         }
     });
 
     $scope.$watch('colorPicker.color', function () {
-        if (angular.isDefined($scope.colorPicker.color) && $scope.colorPicker.color.slice(0, 3) === "rgb") {
-            let color = "c" + $scope.colorPicker.color.slice(3, $scope.colorPicker.color.length);
-            setSolidColor(color);
+        if (angular.isDefined($scope.colorPicker.color)) {
+            if ($scope.colorPicker.color.slice(0, 3) === "rgb") {
+                let color = $scope.colorPicker.color.slice(3, $scope.colorPicker.color.length);
+                setSolidColor(color);
+            }
+            else if ($scope.colorPicker.color.slice(0, 1) === "#") {
+                let color = new tinycolor($scope.colorPicker.color).toRgbString();
+                color = color.slice(3, color.length);
+                setSolidColor(color);
+            }
         }
     });
 
     function init() {
         if (angular.isDefined($cookies.get('port'))) {
             $scope.port = $cookies.get('port');
-            openSerialPort($cookies.get('port'));
         }
         setTimeout(function () {
             if (angular.isDefined($cookies.get('color'))) {
                 $scope.colorPicker.color = $cookies.get('color');
-                setSolidColor("c" + $cookies.get('color').slice(3, $cookies.get('color').length));
             }
             if (angular.isDefined($cookies.get('mode'))) {
                 $scope.mode = $cookies.get('mode');
@@ -72,7 +78,8 @@ app.controller('mainCtrl', function ($scope, $cookies) {
 
     function setSolidColor(color) {
         $cookies.put('color', $scope.colorPicker.color);
+        color = "c" + color;
         SerialPort.write(color);
-        console.log("Sent solid color:" + color);
+        console.log("Sent command: " + color);
     }
 });
