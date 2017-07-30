@@ -20,19 +20,25 @@
   "author": "grimsi",
   "license": "MIT",
   "devDependencies": {
-    "electron": "~1.6.2"
+    "electron": "~1.6.2",
+    "electron-rebuild": "^1.5.11"
   },
   "dependencies": {
     "angular": "^1.5.8",
     "angular-animate": "^1.5.8",
     "angular-aria": "^1.6.5",
+    "angular-cookies": "^1.6.5",
     "angular-material": "^1.1.1",
     "angular-material-icons": "^0.7.1",
     "angular-messages": "^1.5.8",
     "angular-ui-router": "^0.3.1",
     "audio-analyser": "^1.0.2",
+    "electron-cookies": "^1.1.0",
+    "lodash": "^4.17.4",
     "md-color-picker": "^0.2.6",
     "moment": "^2.14.1",
+    "serialport": "^5.0.0-beta8",
+    "tinycolor2": "^1.4.1",
     "window-function": "^2.0.2"
   }
 }

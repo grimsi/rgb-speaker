@@ -11,19 +11,52 @@
     <script src="node_modules/angular/angular.min.js"></script>
     <script src="node_modules/angular-animate/angular-animate.min.js"></script>
     <script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="node_modules/angular-aria/angular-aria.js"></script>
     <script src="node_modules/angular-messages/angular-messages.min.js"></script>
     <script src="node_modules/angular-material/angular-material.min.js"></script>
     <script src="node_modules/angular-material-icons/angular-material-icons.min.js"></script>
-    <script src="node_modules/md-color-picker/src/js/mdColorPicker.js"></script>
-    <!-- Bower Libs -->
-    <script src="bower_components/tinycolor/tinycolor.js"></script>
+    <script src="node_modules/angular-cookies/angular-cookies.min.js"></script>
+    <script src="node_modules/md-color-picker/dist/mdColorPicker.js"></script>
+    <script src="node_modules/tinycolor2/dist/tinycolor-min.js"></script>
+    <script src="node_modules/lodash/lodash.min.js"></script>
     <!-- Style Sheets -->
     <link href="node_modules/md-color-picker/dist/mdColorPicker.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="node_modules/angular-material/angular-material.min.css" type="text/css"/>
+    <link rel="stylesheet" href="node_modules/angular-material-icons/angular-material-icons.css" type="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Project Files -->
+    <script src="app.js"></script>
 </head>
-<body ng-app="rgbSpeaker">
-<div ng-controller="mainCtrl">
-    <div md-color-picker="colorPicker.options" ng-model="colorPicker.color"></div>
-    <h3>{{colorPicker.color}}</h3>
+<body>
+<md-toolbar class="md-hue-2">
+    <div class="md-toolbar-tools">
+        <md-button class="md-icon-button" aria-label="Settings" ng-disabled="true">
+            <i class="material-icons">speaker_group</i>
+        </md-button>
+        <h2 flex md-truncate>RGB-Speaker Control Panel</h2>
+    </div>
+</md-toolbar>
+<div ng-app="rgbSpeaker" ng-controller="mainCtrl">
+    <md-select ng-model="port" placeholder="Select COM Port" required md-no-asterisk="false">
+        <md-option ng-repeat="port in openPorts" ng-value="port">{{port}}</md-option>
+    </md-select>
+    <div ng-show="port" md-color-picker
+         ng-model="colorPicker.color"
+         label="Choose a color"
+         icon="brush"
+         default="#f00"
+         md-color-generic-palette="false"
+         md-color-material-palette="false"
+         md-color-hsl="false"
+         has-backdrop="false"
+         md-color-clear-button="false"
+         click-outside-to-close="false"
+         open-on-input="true"
+         md-color-alpha-channel="false"
+    ></div>
 </div>
 </body>
+<script>
+    require('./renderer.js');
+</script>
 </html>

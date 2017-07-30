@@ -17,14 +17,14 @@ function createWindow() {
     }));
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 
     mainWindow.on('closed', function () {
         mainWindow = null
     })
 }
 
-app.on('ready', createWindow)
+app.on('ready', createWindow);
 
 // Max OSX specific
 app.on('window-all-closed', function () {
