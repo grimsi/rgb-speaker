@@ -17,7 +17,6 @@ app.controller('mainCtrl', function ($scope, $cookies) {
         clickOutsideToClose: false,
         alphaChannel: false
     };
-    $scope.spinner = false;
 
     init();
 
@@ -28,42 +27,52 @@ app.controller('mainCtrl', function ($scope, $cookies) {
     });
 
     $scope.$watch('port', function () {
-        if (angular.isDefined($scope.port)) {
-            SerialPort = new sp($scope.port, {
-                baudrate: 9600,
-                dataBits: 8,
-                parity: 'none',
-                stopBits: 1,
-                flowControl: false
-            });
-            $cookies.put('port', $scope.port);
-            SerialPort.open(function () {
-                console.log("Port opened");
-            });
+        if (angular.isDefined($scope.port) && !sp.isOpen($scope.port)) {
+            openSerialPort($scope.port);
         }
     });
 
     $scope.$watch('colorPicker.color', function () {
         if (angular.isDefined($scope.colorPicker.color) && $scope.colorPicker.color.slice(0, 3) === "rgb") {
-            var color = "c" + _.clone($scope.colorPicker.color.slice(3, $scope.colorPicker.color.length));
-            $cookies.put('color', $scope.colorPicker.color);
-            SerialPort.write(color);
+            let color = "c" + $scope.colorPicker.color.slice(3, $scope.colorPicker.color.length);
+            setSolidColor(color);
         }
     });
 
     function init() {
-        $scope.spinner = true;
         if (angular.isDefined($cookies.get('port'))) {
             $scope.port = $cookies.get('port');
+            openSerialPort($cookies.get('port'));
         }
         setTimeout(function () {
-            if (angular.isDefined($cookies.get('color')) && angular.isDefined($cookies.get('port'))) {
+            if (angular.isDefined($cookies.get('color'))) {
                 $scope.colorPicker.color = $cookies.get('color');
+                setSolidColor("c" + $cookies.get('color').slice(3, $cookies.get('color').length));
             }
             if (angular.isDefined($cookies.get('mode'))) {
                 $scope.mode = $cookies.get('mode');
             }
-            $scope.spinner = false;
+            $scope.$digest();
         }, 500);
+    }
+
+    function openSerialPort(port) {
+        SerialPort = new sp(port, {
+            baudrate: 9600,
+            dataBits: 8,
+            parity: 'none',
+            stopBits: 1,
+            flowControl: false
+        });
+        $cookies.put('port', port);
+        SerialPort.open(function () {
+            console.log("Port opened");
+        });
+    }
+
+    function setSolidColor(color) {
+        $cookies.put('color', $scope.colorPicker.color);
+        SerialPort.write(color);
+        console.log("Sent solid color:" + color);
     }
 });
