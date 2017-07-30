@@ -28,7 +28,7 @@
     <script src="app.js"></script>
 </head>
 <body>
-<md-toolbar class="md-hue-2">
+<md-toolbar class="md-hue-2 md-whiteframe-3dp">
     <div class="md-toolbar-tools">
         <md-button class="md-icon-button" aria-label="Settings" ng-disabled="true">
             <i class="material-icons">speaker_group</i>
@@ -40,20 +40,74 @@
     <md-select ng-model="port" placeholder="Select COM Port" required md-no-asterisk="false">
         <md-option ng-repeat="port in openPorts" ng-value="port">{{port}}</md-option>
     </md-select>
-    <div ng-show="port" md-color-picker
-         ng-model="colorPicker.color"
-         label="Choose a color"
-         icon="brush"
-         default="#f00"
-         md-color-generic-palette="false"
-         md-color-material-palette="false"
-         md-color-hsl="false"
-         has-backdrop="false"
-         md-color-clear-button="false"
-         click-outside-to-close="false"
-         open-on-input="true"
-         md-color-alpha-channel="false"
-    ></div>
+    <md-tabs md-selected="mode.id">
+        <md-tab label="Solid Color" ng-click="changeMode('solid')">
+            <div ng-show="port" md-color-picker
+                 ng-model="colorPicker.color"
+                 label="Choose a color"
+                 icon="brush"
+                 default="#f00"
+                 md-color-generic-palette="false"
+                 md-color-material-palette="false"
+                 md-color-sliders="false"
+                 md-color-hsl="false"
+                 has-backdrop="false"
+                 md-color-clear-button="false"
+                 click-outside-to-close="false"
+                 open-on-input="true"
+                 md-color-alpha-channel="false"
+            ></div>
+        </md-tab>
+        <md-tab label="Rainbow" ng-click="changeMode('rainbow')">
+            <md-slider-container>
+                <span>Speed</span>
+                <md-slider flex min="1" max="10" ng-model="mode.speed" class="md-primary">
+                </md-slider>
+                {{mode.speed}}
+            </md-slider-container>
+            <md-slider-container>
+                <span>Intensity</span>
+                <md-slider flex min="1" max="255" ng-model="mode.intensity" class="md-primary" ng-disabled="true">
+                </md-slider>
+                {{mode.intensity}}
+            </md-slider-container>
+        </md-tab>
+        <md-tab label="Breathing" ng-click="changeMode('breathing')">
+            <div ng-show="port" md-color-picker
+                 ng-model="colorPicker.color"
+                 label="Choose a color"
+                 icon="brush"
+                 default="#f00"
+                 md-color-generic-palette="false"
+                 md-color-material-palette="false"
+                 md-color-sliders="false"
+                 md-color-hsl="false"
+                 has-backdrop="false"
+                 md-color-clear-button="false"
+                 click-outside-to-close="false"
+                 open-on-input="true"
+                 md-color-alpha-channel="false"
+            ></div>
+        </md-tab>
+        <md-tab label="Beat" ng-click="changeMode('beat')">
+            <div ng-show="port" md-color-picker
+                 ng-model="colorPicker.color"
+                 label="Choose a color"
+                 icon="brush"
+                 default="#f00"
+                 md-color-generic-palette="false"
+                 md-color-material-palette="false"
+                 md-color-sliders="false"
+                 md-color-hsl="false"
+                 has-backdrop="false"
+                 md-color-clear-button="false"
+                 click-outside-to-close="false"
+                 open-on-input="true"
+                 md-color-alpha-channel="false"
+            ></div>
+        </md-tab>
+        <md-tab label="Spectrum" ng-click="changeMode('spectrum')"></md-tab>
+    </md-tabs>
 </div>
 </body>
 <script>
