@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -16,6 +15,7 @@
     <script src="node_modules/angular-material/angular-material.min.js"></script>
     <script src="node_modules/angular-material-icons/angular-material-icons.min.js"></script>
     <script src="node_modules/angular-cookies/angular-cookies.min.js"></script>
+    <script src="node_modules/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="node_modules/md-color-picker/dist/mdColorPicker.js"></script>
     <script src="node_modules/tinycolor2/dist/tinycolor-min.js"></script>
     <script src="node_modules/lodash/lodash.min.js"></script>
@@ -25,89 +25,143 @@
     <link rel="stylesheet" href="node_modules/angular-material-icons/angular-material-icons.css" type="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Project Files -->
-    <script src="app.js"></script>
+    <script src="src/app.js"></script>
+    <!-- Services -->
+    <script src="src/services/ColorService.js"></script>
+    <script src="src/services/AudioService.js"></script>
+    <script src="src/services/SerialService.js"></script>
 </head>
-<body>
+<body ng-app="rgbSpeaker" ng-controller="mainCtrl">
 <md-toolbar class="md-hue-2 md-whiteframe-3dp">
     <div class="md-toolbar-tools">
-        <md-button class="md-icon-button" aria-label="Settings" ng-disabled="true">
-            <i class="material-icons">speaker_group</i>
-        </md-button>
+        <i class="material-icons">speaker_group</i>
         <h2 flex md-truncate>RGB-Speaker Control Panel</h2>
+        <div style="float:right">
+            <md-button class="md-icon-button" ng-click="config.debug = !config.debug">
+                <md-tooltip md-direction="bottom">Enable/Disable Debugging</md-tooltip>
+                <i class="material-icons">bug_report</i>
+            </md-button>
+            <md-button class="md-icon-button" ng-click="clearCookies()">
+                <md-tooltip md-direction="bottom">Clear Cache</md-tooltip>
+                <i class="material-icons">delete_forever</i>
+            </md-button>
+        </div>
     </div>
 </md-toolbar>
-<div ng-app="rgbSpeaker" ng-controller="mainCtrl">
-    <md-select ng-model="port" placeholder="Select COM Port" required md-no-asterisk="false">
-        <md-option ng-repeat="port in openPorts" ng-value="port">{{port}}</md-option>
-    </md-select>
-    <md-tabs md-selected="mode.id">
-        <md-tab label="Solid Color" ng-click="changeMode('solid')">
-            <div ng-show="port" md-color-picker
-                 ng-model="colorPicker.color"
-                 label="Choose a color"
-                 icon="brush"
-                 default="#f00"
-                 md-color-generic-palette="false"
-                 md-color-material-palette="false"
-                 md-color-sliders="false"
-                 md-color-hsl="false"
-                 has-backdrop="false"
-                 md-color-clear-button="false"
-                 click-outside-to-close="false"
-                 open-on-input="true"
-                 md-color-alpha-channel="false"
-            ></div>
-        </md-tab>
-        <md-tab label="Rainbow" ng-click="changeMode('rainbow')">
-            <md-slider-container>
-                <span>Speed</span>
-                <md-slider flex min="1" max="10" ng-model="mode.speed" class="md-primary">
-                </md-slider>
-                {{mode.speed}}
-            </md-slider-container>
-            <md-slider-container>
-                <span>Intensity</span>
-                <md-slider flex min="1" max="255" ng-model="mode.intensity" class="md-primary" ng-disabled="true">
-                </md-slider>
-                {{mode.intensity}}
-            </md-slider-container>
-        </md-tab>
-        <md-tab label="Breathing" ng-click="changeMode('breathing')">
-            <div ng-show="port" md-color-picker
-                 ng-model="colorPicker.color"
-                 label="Choose a color"
-                 icon="brush"
-                 default="#f00"
-                 md-color-generic-palette="false"
-                 md-color-material-palette="false"
-                 md-color-sliders="false"
-                 md-color-hsl="false"
-                 has-backdrop="false"
-                 md-color-clear-button="false"
-                 click-outside-to-close="false"
-                 open-on-input="true"
-                 md-color-alpha-channel="false"
-            ></div>
-        </md-tab>
-        <md-tab label="Beat" ng-click="changeMode('beat')">
-            <div ng-show="port" md-color-picker
-                 ng-model="colorPicker.color"
-                 label="Choose a color"
-                 icon="brush"
-                 default="#f00"
-                 md-color-generic-palette="false"
-                 md-color-material-palette="false"
-                 md-color-sliders="false"
-                 md-color-hsl="false"
-                 has-backdrop="false"
-                 md-color-clear-button="false"
-                 click-outside-to-close="false"
-                 open-on-input="true"
-                 md-color-alpha-channel="false"
-            ></div>
-        </md-tab>
-        <md-tab label="Spectrum" ng-click="changeMode('spectrum')"></md-tab>
-    </md-tabs>
+<div>
+    <md-card layout="row" layout-align="center center">
+        <p>Device on Port&nbsp;&nbsp;</p>
+        <md-select ng-model="port" placeholder="Select COM Port" required md-no-asterisk="false">
+            <md-option ng-repeat="port in openPorts" ng-value="port">{{port}}</md-option>
+        </md-select>
+    </md-card>
+    <!--{{width}} x {{height}}-->
+    <md-card ng-show="port !== 'null'">
+        <md-tabs md-selected="config.currentModeId">
+            <md-tab label="Solid Color" ng-click="config.currentModeName='solid'">
+                <md-tab-content layout="row" layout-align="space-around center">
+                    <div flex="40"
+                         ng-show="!config.modes.solid.stereo"
+                         md-color-picker
+                         ng-model="config.modes.solid.color"
+                         label="Speakers"
+                         icon="speaker"
+                         default="#f00"
+                         md-color-generic-palette="false"
+                         md-color-material-palette="false"
+                         md-color-sliders="false"
+                         md-color-hsl="false"
+                         has-backdrop="false"
+                         md-color-clear-button="false"
+                         open-on-input="true"
+                         md-color-alpha-channel="false"
+                    ></div>
+                    <div flex="40"
+                         ng-show="config.modes.solid.stereo"
+                         md-color-picker
+                         ng-model="config.modes.solid.colorLeft"
+                         label="Left Speaker"
+                         icon="speaker"
+                         default="#f00"
+                         md-color-generic-palette="false"
+                         md-color-material-palette="false"
+                         md-color-sliders="false"
+                         md-color-hsl="false"
+                         has-backdrop="false"
+                         md-color-clear-button="false"
+                         open-on-input="true"
+                         md-color-alpha-channel="false"
+                    ></div>
+                    <span layout="column" layout-align="start center">
+                        <md-subheader style="margin-top:-40%">Stereo</md-subheader>
+                        <md-switch ng-model="config.modes.solid.stereo" ng-change="switchStereo" class="md-primary"
+                                   style="margin-top:-20%"></md-switch>
+                    </span>
+                    <div flex="40"
+                         ng-show="config.modes.solid.stereo"
+                         md-color-picker
+                         ng-model="config.modes.solid.colorRight"
+                         label="Right Speaker"
+                         icon="speaker"
+                         default="#f00"
+                         md-color-generic-palette="false"
+                         md-color-material-palette="false"
+                         md-color-sliders="false"
+                         md-color-hsl="false"
+                         has-backdrop="false"
+                         md-color-clear-button="false"
+                         open-on-input="true"
+                         md-color-alpha-channel="false"
+                    ></div>
+                    <div flex="40"
+                         style="pointer-events:none"
+                         ng-show="!config.modes.solid.stereo"
+                         ng-disabled="!config.modes.solid.stereo"
+                         md-color-picker
+                         ng-model="dummyValue"
+                         label="Disabled"
+                         icon="error"
+                    ></div>
+                </md-tab-content>
+            </md-tab>
+            <md-tab label="Rainbow" ng-click="config.currentModeName='rainbow'">
+                <md-tab-content layout="column" layout-align="center center">
+                    <md-slider-container flex="100">
+                        <span>Speed</span>
+                        <md-slider min="1" max="10" ng-model="config.modes.rainbow.speed" class="md-primary">
+                        </md-slider>
+                        <span>{{config.modes.rainbow.speed}}</span>
+                    </md-slider-container>
+                    <md-slider-container ng-disabled="true" flex="100">
+                        <span>Intensity</span>
+                        <md-slider min="1" max="255" ng-model="config.modes.rainbow.intensity" class="md-primary">
+                        </md-slider>
+                        <span>{{config.modes.rainbow.intensity}}</span>
+                    </md-slider-container>
+                </md-tab-content>
+            </md-tab>
+            <md-tab label="Breathing" ng-click="config.currentModeName='breathing'"></md-tab>
+            <md-tab label="Beat" ng-click="config.currentModeName='beat'"></md-tab>
+            <md-tab label="Spectrum" ng-click="config.currentModeName='spectrum'"></md-tab>
+        </md-tabs>
+        <md-button class="md-raised md-primary" ng-click="save()">Save</md-button>
+    </md-card>
+    <div layout="row" layout-align="space-around start" ng-show="config.debug">
+        <div>
+            <md-subheader>Current Config</md-subheader>
+            <pre>{{config | json}}</pre>
+        </div>
+        <div>
+            <md-subheader>Cache - Device Config</md-subheader>
+            <pre ng-show="configCache !== null">{{configCache | json}}</pre>
+            <p ng-show="configCache == null">No cached data.</p>
+        </div>
+        <div>
+            <md-subheader>Cache - Misc</md-subheader>
+            <pre ng-show="portCache !== 'null'">{{portCache | json}}</pre>
+            <p ng-show="portCache == 'null'">No cached data.</p>
+        </div>
+    </div>
 </div>
 </body>
 <script>
