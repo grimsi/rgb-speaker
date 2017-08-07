@@ -112,6 +112,20 @@ app.controller('mainCtrl', function ($scope, $cookies, $mdToast, $mdDialog, colo
         );
     }
 
+    function showInfo() {
+        $mdDialog.show(
+            $mdDialog.alert()
+                .clickOutsideToClose(false)
+                .title('Informations')
+                .htmlContent('This app is used to control custom-built RGB-Speakers.<br/>' +
+                    'For details click <i>here</i>. (there will be an instructible link soon&trade;)<br/><br/>' +
+                    'This app was developed using Electron and Angular Material<br/><br/><br/>' +
+                    '(c) 2017 - Simon Grimme<br/>' +
+                    'Version: beta 0.0.2')
+                .ok('Close')
+        );
+    }
+
     /**
      * Initializes the app
      */
@@ -127,49 +141,49 @@ app.controller('mainCtrl', function ($scope, $cookies, $mdToast, $mdDialog, colo
             $scope.port = $cookies.get('port');
             $scope.portCache = _.cloneDeep($scope.port);
         }
-        setTimeout(function () {
-            if (($cookies.getObject('config'))) {
-                $scope.config = $cookies.getObject('config');
-                $scope.configCache = _.cloneDeep($scope.config);
-            } else {
-                $scope.config = {
-                    currentModeId: 0,
-                    currentModeName: 'solid',
-                    modes: {
-                        'solid': {
-                            id: 0,
-                            color: '#f00',
-                            colorLeft: '#f00',
-                            colorRight: '#00f',
-                            stereo: false
-                        },
-                        'rainbow': {
-                            id: 1,
-                            speed: 5,
-                            intensity: 255
-                        },
-                        'breathing': {
-                            id: 2,
-                            color: '#f00',
-                            speed: 5,
-                            rgb: false
-                        },
-                        'beat': {
-                            id: 3,
-                            speed: 10,
-                            intensity: 255
-                        },
-                        'spectrum': {
-                            id: 4,
-                            speed: 10,
-                            intensity: 255
-                        }
+        if (($cookies.getObject('config'))) {
+            $scope.config = $cookies.getObject('config');
+            $scope.configCache = _.cloneDeep($scope.config);
+        } else {
+            $scope.config = {
+                currentModeId: 0,
+                currentModeName: 'solid',
+                modes: {
+                    'solid': {
+                        id: 0,
+                        color: '#f00',
+                        colorLeft: '#f00',
+                        colorRight: '#00f',
+                        stereo: false
                     },
-                    debug: false
-                };
-            }
-            $scope.$digest();
-        }, 500);
+                    'rainbow': {
+                        id: 1,
+                        speed: 5,
+                        intensity: 255
+                    },
+                    'breathing': {
+                        id: 2,
+                        color: '#f00',
+                        speed: 5,
+                        rgb: false
+                    },
+                    'beat': {
+                        id: 3,
+                        speed: 10,
+                        intensity: 255
+                    },
+                    'spectrum': {
+                        id: 4,
+                        speed: 10,
+                        intensity: 255
+                    }
+                },
+                debug: false
+            };
+        }
+        setTimeout(function () {
+            updateMode();
+        }, 2000);
     }
 
     /**
@@ -177,5 +191,6 @@ app.controller('mainCtrl', function ($scope, $cookies, $mdToast, $mdDialog, colo
      */
     $scope.switchStereo = switchStereo;
     $scope.clearCookies = clearCookies;
+    $scope.showInfo = showInfo;
     $scope.save = save;
 });

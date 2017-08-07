@@ -45,6 +45,10 @@
                 <md-tooltip md-direction="bottom">Clear Cache</md-tooltip>
                 <i class="material-icons">delete_forever</i>
             </md-button>
+            <md-button class="md-icon-button" ng-click="showInfo()">
+                <md-tooltip md-direction="bottom">Info</md-tooltip>
+                <i class="material-icons">info</i>
+            </md-button>
         </div>
     </div>
 </md-toolbar>
@@ -140,9 +144,21 @@
                     </md-slider-container>
                 </md-tab-content>
             </md-tab>
-            <md-tab label="Breathing" ng-click="config.currentModeName='breathing'"></md-tab>
-            <md-tab label="Beat" ng-click="config.currentModeName='beat'"></md-tab>
-            <md-tab label="Spectrum" ng-click="config.currentModeName='spectrum'"></md-tab>
+            <md-tab label="Breathing" ng-click="config.currentModeName='breathing'">
+                <md-tab-content layout="row" layout-align="center center">
+                    <p><i>Coming soon&trade;.</i></p>
+                </md-tab-content>
+            </md-tab>
+            <md-tab label="Beat" ng-click="config.currentModeName='beat'">
+                <md-tab-content layout="row" layout-align="center center">
+                    <p><i>Coming soon&trade;.</i></p>
+                </md-tab-content>
+            </md-tab>
+            <md-tab label="Spectrum" ng-click="config.currentModeName='spectrum'">
+                <md-tab-content layout="row" layout-align="center center">
+                    <p><i>Coming soon&trade;.</i></p>
+                </md-tab-content>
+            </md-tab>
         </md-tabs>
         <md-button class="md-raised md-primary" ng-click="save()">Save</md-button>
     </md-card>
