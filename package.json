@@ -1,10 +1,13 @@
 {
   "name": "arduino-rgb-speaker",
-  "version": "0.0.1",
+  "productName": "rgb-speaker",
+  "version": "0.0.2",
   "description": "Software Client to control the RGB-Speakers",
+  "icon": "./assets/app.ico",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-packager . --overwrite --asar=true --platform=win32 --arch=x64 --icon=assets/app.ico --prune=true --out=build --version-string.CompanyName=\"Simon Grimme\" --version-string.FileDescription=\"RGB-Speaker Control Panel\" --version-string.ProductName=\"RGB-Speaker Control Panel\""
   },
   "repository": "https://github.com/grimsi/rgb-speaker",
   "keywords": [

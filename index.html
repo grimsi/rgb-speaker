@@ -60,7 +60,7 @@
         </md-select>
     </md-card>
     <!--{{width}} x {{height}}-->
-    <md-card ng-show="port !== 'null'">
+    <md-card ng-show="port.substring(0,3) === 'COM'">
         <md-tabs md-selected="config.currentModeId">
             <md-tab label="Solid Color" ng-click="config.currentModeName='solid'">
                 <md-tab-content layout="row" layout-align="space-around center">

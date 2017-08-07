@@ -26,9 +26,11 @@ function openPort(port) {
         stopBits: 1,
         flowControl: false
     });
-    SerialPort.open(function () {
-        console.log("Port " + port + " opened.");
-    });
+    if (!SerialPort.isOpen) {
+        SerialPort.open(function () {
+            console.log("Port " + port + " opened.");
+        });
+    }
 }
 
 function setMode(mode, params) {
