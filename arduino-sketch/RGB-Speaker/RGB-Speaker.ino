@@ -35,40 +35,42 @@ boolean checkAPI(){
     case 'c': r = Serial.parseInt();
               g = Serial.parseInt();
               b = Serial.parseInt();
-              setRGB(r, g, b, 2); 
               flushSerial();
+              setRGB(r, g, b, 2);
               return true;
               break;
     case 'l': r = Serial.parseInt();
               g = Serial.parseInt();
               b = Serial.parseInt();
-              setRGB(r, g, b, 0); 
+              flushSerial();
+              setRGB(r, g, b, 0);
               flushSerial();
               return true;
               break;
     case 'r': r = Serial.parseInt();
               g = Serial.parseInt();
               b = Serial.parseInt();
-              setRGB(r, g, b, 1); 
               flushSerial();
+              setRGB(r, g, b, 1);
               return true;
               break;
     case 'f': speed = Serial.parseInt();
               intensity = Serial.parseInt();
-              fadeRGB(speed, intensity);
               flushSerial();
+              fadeRGB(speed, intensity);
               return true;
               break;
     case 'b': r = Serial.parseInt();
               g = Serial.parseInt();
               b = Serial.parseInt();
               speed = Serial.parseInt();
-              breathSolid(r, g, b, speed);
               flushSerial();
+              breathSolid(r, g, b, speed);
               return true;
               break;
     case 'd': speed = Serial.parseInt();
               intensity = Serial.parseInt();
+              flushSerial();
               breathRGB(speed, intensity);
               flushSerial();
               return true;
@@ -110,46 +112,125 @@ void fadeRGB(int speed, int intensity){
     int blueVal = 0;
     int greenVal = 0;
     
-    for( int i = 0 ; i < 255; i++){
-      greenVal += 1;
-      redVal -= 1;
-      setRGB(redVal, blueVal, greenVal, 0);
-      setRGB(redVal, blueVal, greenVal, 1);
+    for(int i=0; i<255; i++){
+      greenVal++;
+      redVal--;
+      setRGB(redVal, blueVal, greenVal, 2);
       if(checkAPI() == true){ return; }
-      delay( delayTime );
+      delay(delayTime);
     }
  
     redVal = 0;
     blueVal = 0;
     greenVal = 255;
-    for( int i = 0 ; i < 255; i++ ){
-      blueVal += 1;
-      greenVal -= 1;
-      setRGB(redVal, blueVal, greenVal, 0);
-      setRGB(redVal, blueVal, greenVal, 1);
+    for(int i=0; i<255; i++){
+      blueVal++;
+      greenVal--;
+      setRGB(redVal, blueVal, greenVal, 2);
       if(checkAPI() == true){ return; }
-      delay( delayTime );
+      delay(delayTime);
     }
    
     redVal = 0;
     blueVal = 255;
     greenVal = 0;
-    for( int i = 0 ; i < 255; i++ ){
-      redVal += 1;
-      blueVal -= 1;
-      setRGB(redVal, blueVal, greenVal, 0);
-      setRGB(redVal, blueVal, greenVal, 1);
+    for(int i=0; i<255; i++){
+      redVal++;
+      blueVal--;
+      setRGB(redVal, blueVal, greenVal, 2);
       if(checkAPI() == true){ return; }
-      delay( delayTime );
+      delay(delayTime);
     }
   }
 }
 
 void breathSolid(int r, int g, int b, int speed){
-  //TODO: implement
+  int delayTime = 40/speed;
+  while(true){    
+    for(int i=255; i>0; i--){
+      setRGB(map(i, 0, 255, 0, r), map(i, 0, 255, 0, g), map(i, 0, 255, 0, b), 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+    delay(25*delayTime);
+    for(int i=0; i<255; i++){
+      setRGB(map(i, 0, 255, 0, r), map(i, 0, 255, 0, g), map(i, 0, 255, 0, b), 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+    delay(50*delayTime);
+  }
 }
 
 void breathRGB(int speed, int intensity){
-  //TODO: implement
+  int delayTime = 40/speed;
+  while(true){
+    for(int i=255; i!=0; i--){
+      setRGB(i, 0, 0, 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+    
+    for(int i=0; i<255; i++){
+      setRGB(i, i, 0, 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+    for(int i=255; i!=0; i--){
+      setRGB(i, i, 0, 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+    
+    for(int i=0; i<255; i++){
+      setRGB(0, i, 0, 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+    for(int i=255; i!=0; i--){
+      setRGB(0, i, 0, 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+    
+    for(int i=0; i<255; i++){
+      setRGB(0, i, i, 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+    for(int i=255; i!=0; i--){
+      setRGB(0, i, i, 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+    
+    for(int i=0; i<255; i++){
+      setRGB(0, 0, i, 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+    for(int i=255; i!=0; i--){
+      setRGB(0, 0, i, 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+    
+    for(int i=0; i<255; i++){
+      setRGB(i, 0, i, 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+    for(int i=255; i!=0; i--){
+      setRGB(i, 0, i, 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+
+    for(int i=0; i<255; i++){
+      setRGB(i, 0, 0, 2);
+      if(checkAPI() == true){ return; }
+      delay(delayTime);
+    }
+  }
 }
 

@@ -14,6 +14,7 @@ let modes = {
     'right': 'r',
     'rainbow': 'f',
     'breathing': 'b',
+    'breathingRGB': 'd',
     'beat': 'm',
     'spectrum': 's'
 };
@@ -46,6 +47,10 @@ function setMode(mode, params) {
             break;
         case 'b':
             SerialPort.write("b(" + params.colors.r + ", " + params.colors.g + ", " + params.colors.b + "," + params.speed);
+            break;
+        case 'd':
+            SerialPort.write("d(" + params.speed + "," + params.intensity);
+            console.info("Sent command: d(" + params.speed + ", " + params.intensity + ")");
             break;
         case 'f':
             SerialPort.write("f(" + params.speed + ", " + params.intensity);

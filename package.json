@@ -38,6 +38,7 @@
     "angular-ui-router": "^0.3.1",
     "audio-analyser": "^1.0.2",
     "electron-cookies": "^1.1.0",
+    "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "md-color-picker": "^0.2.6",
     "moment": "^2.14.1",

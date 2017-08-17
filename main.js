@@ -9,7 +9,7 @@ let mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({width: 627, height: 616, resizable: true});
-    //mainWindow.setMenu(null);
+    mainWindow.setMenu(null);
 
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),

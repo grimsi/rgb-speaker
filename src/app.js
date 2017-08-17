@@ -6,18 +6,26 @@ app.controller('mainCtrl', function ($scope, $cookies, $mdToast, $mdDialog, colo
     $scope.stereo = false;
 
 
-    let modeIds = {
+    /*let modeIds = {
         'solid': 0,
         'rainbow': 1,
         'breathing': 2,
         'beat': 3,
         'spectrum': 4
-    };
+    };*/
 
-    /*setInterval(function () {
-        $scope.width = window.outerWidth;
-        $scope.height = window.outerHeight;
-    }, 10);*/
+    $scope.$watch('config.debug', function () {
+        let sizeInterval;
+        if ($scope.config.debug) {
+            sizeInterval = setInterval(function () {
+                $scope.width = window.outerWidth;
+                $scope.height = window.outerHeight;
+            }, 10);
+        } else {
+            clearInterval(sizeInterval);
+        }
+    });
+
 
     init();
 
@@ -52,6 +60,12 @@ app.controller('mainCtrl', function ($scope, $cookies, $mdToast, $mdDialog, colo
         }
     }
 
+    /**
+     * gets called when the rgb switch in "breathing" gets toggled
+     */
+    function switchRGB() {
+
+    }
 
     /**
      * does a bit of magic and sends the serial commands to the arduino using SerialService
@@ -80,7 +94,20 @@ app.controller('mainCtrl', function ($scope, $cookies, $mdToast, $mdDialog, colo
             };
             serialService.setMode('left', paramsLeft);
             serialService.setMode('right', paramsRight);
-        } else {
+        }
+        else if ($scope.config.currentModeId === 2 && $scope.config.modes.breathing.rgb) {
+            let params = {
+                colors: {
+                    r: undefined,
+                    g: undefined,
+                    b: undefined
+                },
+                speed: $scope.config.modes.breathing.speed,
+                intensity: $scope.config.modes.breathing.intensity
+            };
+            serialService.setMode('breathingRGB', params);
+        }
+        else {
             let color = colorService.getRGB($scope.config.modes[$scope.config.currentModeName].color);
             let params = {
                 colors: {
@@ -118,7 +145,7 @@ app.controller('mainCtrl', function ($scope, $cookies, $mdToast, $mdDialog, colo
                 .clickOutsideToClose(false)
                 .title('Informations')
                 .htmlContent('This app is used to control custom-built RGB-Speakers.<br/>' +
-                    'For details click <i>here</i>. (there will be an instructible link soon&trade;)<br/><br/>' +
+                    'For details click <a href="https://www.instructables.com/id/Software-Controlled-RGB-Speakers/">here</a>.<br/><br/>' +
                     'This app was developed using Electron and Angular Material<br/><br/><br/>' +
                     '(c) 2017 - Simon Grimme<br/>' +
                     'Version: beta 0.0.2')
@@ -165,6 +192,7 @@ app.controller('mainCtrl', function ($scope, $cookies, $mdToast, $mdDialog, colo
                         id: 2,
                         color: '#f00',
                         speed: 5,
+                        intensity: 5,
                         rgb: false
                     },
                     'beat': {
@@ -190,6 +218,7 @@ app.controller('mainCtrl', function ($scope, $cookies, $mdToast, $mdDialog, colo
      * Functions callable from view
      */
     $scope.switchStereo = switchStereo;
+    $scope.switchRGB = switchRGB;
     $scope.clearCookies = clearCookies;
     $scope.showInfo = showInfo;
     $scope.save = save;
