@@ -163,70 +163,71 @@ void breathSolid(int r, int g, int b, int speed){
 }
 
 void breathRGB(int speed, int intensity){
-  int delayTime = 40/speed;
+  float delayTime = (40 / speed) * (255 / (float) intensity);
+  delayTime = (int) delayTime;
   while(true){
-    for(int i=255; i!=0; i--){
+    for(int i=intensity; i!=0; i--){
       setRGB(i, 0, 0, 2);
       if(checkAPI() == true){ return; }
       delay(delayTime);
     }
     
-    for(int i=0; i<255; i++){
+    for(int i=0; i<intensity; i++){
       setRGB(i, i, 0, 2);
       if(checkAPI() == true){ return; }
       delay(delayTime);
     }
-    for(int i=255; i!=0; i--){
+    for(int i=intensity; i!=0; i--){
       setRGB(i, i, 0, 2);
       if(checkAPI() == true){ return; }
       delay(delayTime);
     }
     
-    for(int i=0; i<255; i++){
+    for(int i=0; i<intensity; i++){
       setRGB(0, i, 0, 2);
       if(checkAPI() == true){ return; }
       delay(delayTime);
     }
-    for(int i=255; i!=0; i--){
+    for(int i=intensity; i!=0; i--){
       setRGB(0, i, 0, 2);
       if(checkAPI() == true){ return; }
       delay(delayTime);
     }
     
-    for(int i=0; i<255; i++){
+    for(int i=0; i<intensity; i++){
       setRGB(0, i, i, 2);
       if(checkAPI() == true){ return; }
       delay(delayTime);
     }
-    for(int i=255; i!=0; i--){
+    for(int i=intensity; i!=0; i--){
       setRGB(0, i, i, 2);
       if(checkAPI() == true){ return; }
       delay(delayTime);
     }
     
-    for(int i=0; i<255; i++){
+    for(int i=0; i<intensity; i++){
       setRGB(0, 0, i, 2);
       if(checkAPI() == true){ return; }
       delay(delayTime);
     }
-    for(int i=255; i!=0; i--){
+    for(int i=intensity; i!=0; i--){
       setRGB(0, 0, i, 2);
       if(checkAPI() == true){ return; }
       delay(delayTime);
     }
     
-    for(int i=0; i<255; i++){
+    for(int i=0; i<intensity; i++){
       setRGB(i, 0, i, 2);
       if(checkAPI() == true){ return; }
       delay(delayTime);
     }
-    for(int i=255; i!=0; i--){
+    for(int i=intensity; i!=0; i--){
       setRGB(i, 0, i, 2);
       if(checkAPI() == true){ return; }
       delay(delayTime);
     }
 
-    for(int i=0; i<255; i++){
+    for(int i=0; i<intensity; i++){
       setRGB(i, 0, 0, 2);
       if(checkAPI() == true){ return; }
       delay(delayTime);

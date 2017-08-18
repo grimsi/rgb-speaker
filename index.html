@@ -99,7 +99,7 @@
                     <span layout="column" layout-align="start center">
                         <md-subheader style="margin-top:-40%">Stereo</md-subheader>
                         <md-switch ng-model="config.modes.solid.stereo" ng-change="switchStereo" class="md-primary"
-                                   style="margin-top:-20%"></md-switch>
+                                   style="margin-top:-20%; margin-left: 7px"></md-switch>
                     </span>
                     <div flex="40"
                          ng-show="config.modes.solid.stereo"
@@ -164,15 +164,21 @@
                     <div flex="40">
                         <md-slider-container style="margin-top: 20px">
                             <span>Speed</span>
-                            <md-slider min="1" max="10" ng-model="config.modes.breathing.speed" class="md-primary">
-                            </md-slider>
+                            <md-slider min="1" max="10" ng-model="config.modes.breathing.speed"
+                                       class="md-primary"></md-slider>
                             <span>{{config.modes.breathing.speed}}</span>
                         </md-slider-container>
                         <span layout="column" layout-align="start center">
-                        <md-subheader>RGB</md-subheader>
-                        <md-switch ng-model="config.modes.breathing.rgb" ng-change="switchRGB"
-                                   class="md-primary" style="margin-top: -15px; margin-left: 7px"></md-switch>
-                    </span>
+                            <md-subheader>RGB</md-subheader>
+                            <md-switch ng-model="config.modes.breathing.rgb" ng-change="switchRGB" class="md-primary"
+                                       style="margin-top: -15px; margin-left: 7px"></md-switch>
+                        </span>
+                        <md-slider-container>
+                            <span>Intensity</span>
+                            <md-slider min="1" max="255" ng-model="config.modes.breathing.intensity"
+                                       ng-disabled="!config.modes.breathing.rgb" class="md-primary"></md-slider>
+                            <span>{{config.modes.breathing.intensity}}</span>
+                        </md-slider-container>
                     </div>
                 </md-tab-content>
             </md-tab>

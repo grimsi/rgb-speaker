@@ -192,7 +192,7 @@ app.controller('mainCtrl', function ($scope, $cookies, $mdToast, $mdDialog, colo
                         id: 2,
                         color: '#f00',
                         speed: 5,
-                        intensity: 5,
+                        intensity: 255,
                         rgb: false
                     },
                     'beat': {
